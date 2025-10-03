@@ -1,3 +1,12 @@
+Tentu, saya akan menghapus semua fitur musik dari kode tersebut.
+
+Ini akan menghilangkan pemutaran musik otomatis dan juga tombol kontrol musik (Mute/Unmute) dari halaman. Hasilnya adalah versi game yang bersih dan senyap, yang berfokus murni pada permainan.
+
+### Kode Lengkap (Versi Tanpa Musik)
+
+Berikut adalah kode final dalam satu file `.html` yang sudah saya bersihkan dari semua elemen musik.
+
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -108,36 +117,11 @@
 
         /* Visibilitas Layar */
         .hidden { display: none; }
-
-        /* Kontrol Musik */
-        #music-control {
-            position: fixed;
-            bottom: 15px;
-            right: 15px;
-            width: 50px;
-            height: 50px;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 24px;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
     </style>
 </head>
 <body>
 
     <!-- ========================= BAGIAN HTML ========================= -->
-
-    <!-- ELEMEN AUDIO UNTUK MUSIK LATAR -->
-    <audio id="background-music" src="sore.mp3" loop></audio>
-
-    <!-- TOMBOL KONTROL MUSIK -->
-    <button id="music-control">🔊</button>
 
     <div class="container">
         <!-- 1. Layar Awal: Pilih Kategori -->
@@ -206,41 +190,6 @@
 
 <!-- ========================= BAGIAN JAVASCRIPT ========================= -->
 <script>
-    // --- KONTROL MUSIK ---
-    const music = document.getElementById('background-music');
-    const musicControlBtn = document.getElementById('music-control');
-    let isMusicPlaying = false;
-    music.volume = 0.3;
-
-    function playMusic() {
-        music.play().then(() => {
-            isMusicPlaying = true;
-            musicControlBtn.textContent = '🔊';
-        }).catch(() => {
-            isMusicPlaying = false;
-            musicControlBtn.textContent = '🔇';
-        });
-    }
-    
-    playMusic();
-
-    musicControlBtn.addEventListener('click', () => {
-        if (isMusicPlaying) {
-            music.pause();
-            musicControlBtn.textContent = '🔇';
-        } else {
-            music.play();
-            musicControlBtn.textContent = '🔊';
-        }
-        isMusicPlaying = !isMusicPlaying;
-    });
-
-    document.body.addEventListener('click', () => {
-        if (!isMusicPlaying && music.paused) {
-            playMusic();
-        }
-    }, { once: true });
-
     // --- DATA ---
     const vocabData = {
         classroom: [ { jp: "Hajimemashou", id: "Mari kita mulai" }, { jp: "Owarimashou", id: "Mari kita akhiri" }, { jp: "Yasumimashou", id: "Mari kita beristirahat" }, { jp: "Wakarimasuka", id: "Apakah anda mengerti?" }, { jp: "Hai, wakarimasu", id: "Ya, mengerti" }, { jp: "Iie, wakarimasen", id: "Tidak, tidak mengerti" }, { jp: "Itte kudasai", id: "Mohon dengarkan/ucapkan" }, { jp: "Mou ichido itte kudasai", id: "Ucapkan sekali lagi" }, { jp: "Yukkuri itte kudasai", id: "Ucapkan perlahan-lahan" }, { jp: "Isshoni douzo", id: "Mari bersama-sama" }, { jp: "Kaite kudasai", id: "Mohon di tulis/tulislah" }, { jp: "Yonde kudasai", id: "Mohon di baca/bacalah" }, { jp: "Hon o akete kudasai", id: "Bukalah buku" }, { jp: "Hon o tojite kudasai", id: "Tutuplah Buku" }, { jp: "Renshuu shite kudasai", id: "Berlatihlah" }, { jp: "Korede owarimasu", id: "Sampai di sini dulu" }, { jp: "Shitsumon ga arimasu ka", id: "Ada pertanyaan?" }, { jp: "Hai, arimasu", id: "Ya, ada" }, { jp: "Iie, arimasen", id: "Tidak, tidak ada" }, { jp: "Chotto matte kudasai", id: "Tunggu sebentar" }, { jp: "Kotaete kudasai", id: "Mohon dijawab/jawablah" }, { jp: "Ii desu", id: "Baik" }, { jp: "Chigaimasu", id: "Salah" }, { jp: "Okurete, sumimasen", id: "Maaf, (saya) terlambat datang" }, { jp: "Sumimasen, toire e itte mo ii desuka", id: "Maaf, bolehkah ke kamar kecil" } ],
@@ -282,5 +231,4 @@
 
 </body>
 </html>
-
-
+```
