@@ -1,8 +1,3 @@
-Tentu, saya telah menghapus semua kode yang berkaitan dengan musik latar.
-
-Berikut adalah versi bersih dari kode game Anda tanpa elemen audio, tombol kontrol musik, dan skrip JavaScript terkait.
-
-```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -113,11 +108,39 @@ Berikut adalah versi bersih dari kode game Anda tanpa elemen audio, tombol kontr
 
         /* Visibilitas Layar */
         .hidden { display: none; }
+
+        /* [BARU] Kontrol Musik */
+        #music-control {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
 
     <!-- ========================= BAGIAN HTML ========================= -->
+
+    <!-- [BARU] ELEMEN AUDIO UNTUK MUSIK LATAR -->
+    <audio id="background-music" loop>
+        <source src="sore1.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung elemen audio.
+    </audio>
+
+    <!-- [BARU] TOMBOL KONTROL MUSIK -->
+    <button id="music-control">🔇</button>
 
     <div class="container">
         <!-- 1. Layar Awal: Pilih Kategori -->
@@ -155,9 +178,7 @@ Berikut adalah versi bersih dari kode game Anda tanpa elemen audio, tombol kontr
                 <span id="mc-progress">Soal: 1/20</span>
                 <span id="mc-tally">Benar: 0 | Salah: 0</span>
             </div>
-            <div id="mc-question-container">
-                <!-- Konten pertanyaan akan diisi oleh JS -->
-            </div>
+            <div id="mc-question-container"></div>
             <div id="mc-options"></div>
             <div id="mc-feedback"></div>
             <button id="mc-next-btn" class="btn hidden">Lanjut</button>
@@ -186,6 +207,57 @@ Berikut adalah versi bersih dari kode game Anda tanpa elemen audio, tombol kontr
 
 <!-- ========================= BAGIAN JAVASCRIPT ========================= -->
 <script>
+    // --- [BARU] KONTROL MUSIK ---
+    const music = document.getElementById('background-music');
+    const musicControlBtn = document.getElementById('music-control');
+    let isMusicPlaying = false;
+    music.volume = 0.3; // Atur volume musik (0.0 sampai 1.0)
+
+    // Fungsi untuk mencoba memutar musik
+    function tryPlayMusic() {
+        if (isMusicPlaying || !music) return;
+
+        const playPromise = music.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                isMusicPlaying = true;
+                musicControlBtn.textContent = '🔊';
+            }).catch(error => {
+                console.log("Autoplay musik dicegah. Menunggu interaksi pengguna.");
+                isMusicPlaying = false;
+                musicControlBtn.textContent = '🔇';
+            });
+        }
+    }
+
+    // Fungsi untuk meng-handle tombol kontrol musik
+    musicControlBtn.addEventListener('click', () => {
+        if (isMusicPlaying) {
+            music.pause();
+            musicControlBtn.textContent = '🔇';
+        } else {
+            music.play();
+            musicControlBtn.textContent = '🔊';
+        }
+        isMusicPlaying = !isMusicPlaying;
+    });
+
+    // Fungsi untuk memulai musik pada interaksi pertama pengguna
+    function playOnFirstInteraction() {
+        tryPlayMusic();
+        // Hapus listener setelah dijalankan sekali agar tidak berulang
+        document.body.removeEventListener('click', playOnFirstInteraction);
+        document.body.removeEventListener('keydown', playOnFirstInteraction);
+    }
+
+    // Tambahkan listener untuk klik atau tombol keyboard pertama
+    document.body.addEventListener('click', playOnFirstInteraction);
+    document.body.addEventListener('keydown', playOnFirstInteraction);
+    
+    // Coba putar musik saat halaman selesai dimuat
+    window.addEventListener('load', tryPlayMusic);
+
+
     // --- DATA ---
     const vocabData = {
         classroom: [ { jp: "Hajimemashou", id: "Mari kita mulai" }, { jp: "Owarimashou", id: "Mari kita akhiri" }, { jp: "Yasumimashou", id: "Mari kita beristirahat" }, { jp: "Wakarimasuka", id: "Apakah anda mengerti?" }, { jp: "Hai, wakarimasu", id: "Ya, mengerti" }, { jp: "Iie, wakarimasen", id: "Tidak, tidak mengerti" }, { jp: "Itte kudasai", id: "Mohon dengarkan/ucapkan" }, { jp: "Mou ichido itte kudasai", id: "Ucapkan sekali lagi" }, { jp: "Yukkuri itte kudasai", id: "Ucapkan perlahan-lahan" }, { jp: "Isshoni douzo", id: "Mari bersama-sama" }, { jp: "Kaite kudasai", id: "Mohon di tulis/tulislah" }, { jp: "Yonde kudasai", id: "Mohon di baca/bacalah" }, { jp: "Hon o akete kudasai", id: "Bukalah buku" }, { jp: "Hon o tojite kudasai", id: "Tutuplah Buku" }, { jp: "Renshuu shite kudasai", id: "Berlatihlah" }, { jp: "Korede owarimasu", id: "Sampai di sini dulu" }, { jp: "Shitsumon ga arimasu ka", id: "Ada pertanyaan?" }, { jp: "Hai, arimasu", id: "Ya, ada" }, { jp: "Iie, arimasen", id: "Tidak, tidak ada" }, { jp: "Chotto matte kudasai", id: "Tunggu sebentar" }, { jp: "Kotaete kudasai", id: "Mohon dijawab/jawablah" }, { jp: "Ii desu", id: "Baik" }, { jp: "Chigaimasu", id: "Salah" }, { jp: "Okurete, sumimasen", id: "Maaf, (saya) terlambat datang" }, { jp: "Sumimasen, toire e itte mo ii desuka", id: "Maaf, bolehkah ke kamar kecil" } ],
