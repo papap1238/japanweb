@@ -167,12 +167,13 @@
         <div id="music-popup-box">
             <h3>Musik Latar</h3>
             <p>Apakah Anda ingin memutar musik selama bermain?</p>
+            <!-- Ganti nama tombol di sini jika perlu -->
             <button id="play-music-btn" class="btn">Ya, Putar Musik</button>
             <button id="no-music-btn" class="btn btn-secondary">Tidak, Terima Kasih</button>
         </div>
     </div>
 
-    <!-- ELEMEN AUDIO (NAMA FILE SUDAH DIPERBAIKI) -->
+    <!-- ELEMEN AUDIO -->
     <audio id="background-music" src="sore1.mp3" loop></audio>
 
     <!-- TOMBOL KONTROL MUSIK (Awalnya disembunyikan) -->
@@ -196,7 +197,7 @@
             </div>
         </div>
 
-        <!-- 2. Layar Pilih Game (untuk Kosakata) -->
+        <!-- Layar-layar game lainnya (tidak diubah) -->
         <div id="game-selection-screen" class="hidden">
             <h2 id="game-selection-title"></h2>
             <p>Pilih jenis permainan yang ingin kamu mainkan.</p>
@@ -206,23 +207,17 @@
             </div>
             <button class="btn btn-secondary" onclick="showScreen('category-screen')">Kembali ke Menu Utama</button>
         </div>
-
-        <!-- 3. Layar Game Pilihan Ganda (Kosakata & Kana) -->
         <div id="multiple-choice-screen" class="hidden">
             <h2 id="mc-title"></h2>
             <div id="mc-stats-bar">
                 <span id="mc-progress">Soal: 1/20</span>
                 <span id="mc-tally">Benar: 0 | Salah: 0</span>
             </div>
-            <div id="mc-question-container">
-                <!-- Konten pertanyaan akan diisi oleh JS -->
-            </div>
+            <div id="mc-question-container"></div>
             <div id="mc-options"></div>
             <div id="mc-feedback"></div>
             <button id="mc-next-btn" class="btn hidden">Lanjut</button>
         </div>
-
-        <!-- 4. Layar Game Drag & Drop (Hanya Kosakata) -->
         <div id="drag-drop-screen" class="hidden">
             <h2 id="dd-title"></h2>
             <p>Seret arti (di kanan) ke frasa Jepang yang sesuai (di kiri).</p>
@@ -233,8 +228,6 @@
             <div id="dd-feedback"></div>
             <button id="dd-check-btn" class="btn">Cek Jawaban</button>
         </div>
-
-        <!-- 5. Layar Akhir -->
         <div id="end-screen" class="hidden">
             <h2>Game Selesai!</h2>
             <p id="final-score"></p>
@@ -243,9 +236,9 @@
         </div>
     </div>
 
-<!-- ========================= BAGIAN JAVASCRIPT ========================= -->
+<!-- ========================= BAGIAN JAVASCRIPT (SUDAH DIPERBAIKI) ========================= -->
 <script>
-    // --- KONTROL MUSIK DENGAN POP-UP (VERSI PERBAIKAN) ---
+    // --- KONTROL MUSIK DENGAN POP-UP (VERSI FINAL) ---
     const music = document.getElementById('background-music');
     const musicControlBtn = document.getElementById('music-control');
     const musicPopup = document.getElementById('music-popup-overlay');
@@ -332,11 +325,8 @@
     function showEndScreen(finalScore, maxScore) { document.getElementById('final-score').textContent = `Skor Akhir Kamu: ${finalScore} dari ${maxScore}`; showScreen('end-screen'); }
     
     // --- INISIALISASI ---
-    // Tampilkan layar kategori utama, tetapi pop-up akan muncul di atasnya
     showScreen('category-screen');
 </script>
 
 </body>
 </html>
-```
-
