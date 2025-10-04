@@ -1,3 +1,8 @@
+Tentu, saya telah menghapus semua kode yang berkaitan dengan musik latar.
+
+Berikut adalah versi bersih dari kode game Anda tanpa elemen audio, tombol kontrol musik, dan skrip JavaScript terkait.
+
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -108,39 +113,11 @@
 
         /* Visibilitas Layar */
         .hidden { display: none; }
-
-        /* Kontrol Musik */
-        #music-control {
-            position: fixed;
-            bottom: 15px;
-            right: 15px;
-            width: 50px;
-            height: 50px;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 24px;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
     </style>
 </head>
 <body>
 
     <!-- ========================= BAGIAN HTML ========================= -->
-
-    <!-- ELEMEN AUDIO UNTUK MUSIK LATAR -->
-    <audio id="background-music" loop>
-        <source src="sore.mp3" type="audio/mpeg">
-        Browser Anda tidak mendukung elemen audio.
-    </audio>
-
-    <!-- TOMBOL KONTROL MUSIK -->
-    <button id="music-control">🔇</button>
 
     <div class="container">
         <!-- 1. Layar Awal: Pilih Kategori -->
@@ -209,58 +186,6 @@
 
 <!-- ========================= BAGIAN JAVASCRIPT ========================= -->
 <script>
-    // --- KONTROL MUSIK ---
-    const music = document.getElementById('background-music');
-    const musicControlBtn = document.getElementById('music-control');
-    let isMusicPlaying = false;
-    music.volume = 0.3;
-
-    // Fungsi untuk mencoba memutar musik
-    function tryPlayMusic() {
-        // Cek jika musik sudah diputar atau elemen tidak ada
-        if (isMusicPlaying || !music) return;
-
-        const playPromise = music.play();
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                // Autoplay berhasil
-                isMusicPlaying = true;
-                musicControlBtn.textContent = '🔊';
-            }).catch(error => {
-                // Autoplay gagal, tunggu interaksi pengguna
-                console.log("Autoplay musik dicegah oleh browser. Menunggu interaksi pengguna.");
-                isMusicPlaying = false;
-                musicControlBtn.textContent = '🔇';
-            });
-        }
-    }
-
-    // Toggle play/pause saat tombol kontrol diklik
-    musicControlBtn.addEventListener('click', () => {
-        if (isMusicPlaying) {
-            music.pause();
-            musicControlBtn.textContent = '🔇';
-        } else {
-            music.play();
-            musicControlBtn.textContent = '🔊';
-        }
-        isMusicPlaying = !isMusicPlaying;
-    });
-
-    // Event listener untuk memulai musik pada interaksi pertama pengguna
-    function playOnFirstInteraction() {
-        tryPlayMusic();
-        // Hapus event listener ini setelah dijalankan sekali
-        document.body.removeEventListener('click', playOnFirstInteraction);
-        document.body.removeEventListener('keydown', playOnFirstInteraction);
-    }
-
-    document.body.addEventListener('click', playOnFirstInteraction);
-    document.body.addEventListener('keydown', playOnFirstInteraction);
-    
-    // Coba putar musik saat halaman selesai dimuat
-    window.addEventListener('load', tryPlayMusic);
-
     // --- DATA ---
     const vocabData = {
         classroom: [ { jp: "Hajimemashou", id: "Mari kita mulai" }, { jp: "Owarimashou", id: "Mari kita akhiri" }, { jp: "Yasumimashou", id: "Mari kita beristirahat" }, { jp: "Wakarimasuka", id: "Apakah anda mengerti?" }, { jp: "Hai, wakarimasu", id: "Ya, mengerti" }, { jp: "Iie, wakarimasen", id: "Tidak, tidak mengerti" }, { jp: "Itte kudasai", id: "Mohon dengarkan/ucapkan" }, { jp: "Mou ichido itte kudasai", id: "Ucapkan sekali lagi" }, { jp: "Yukkuri itte kudasai", id: "Ucapkan perlahan-lahan" }, { jp: "Isshoni douzo", id: "Mari bersama-sama" }, { jp: "Kaite kudasai", id: "Mohon di tulis/tulislah" }, { jp: "Yonde kudasai", id: "Mohon di baca/bacalah" }, { jp: "Hon o akete kudasai", id: "Bukalah buku" }, { jp: "Hon o tojite kudasai", id: "Tutuplah Buku" }, { jp: "Renshuu shite kudasai", id: "Berlatihlah" }, { jp: "Korede owarimasu", id: "Sampai di sini dulu" }, { jp: "Shitsumon ga arimasu ka", id: "Ada pertanyaan?" }, { jp: "Hai, arimasu", id: "Ya, ada" }, { jp: "Iie, arimasen", id: "Tidak, tidak ada" }, { jp: "Chotto matte kudasai", id: "Tunggu sebentar" }, { jp: "Kotaete kudasai", id: "Mohon dijawab/jawablah" }, { jp: "Ii desu", id: "Baik" }, { jp: "Chigaimasu", id: "Salah" }, { jp: "Okurete, sumimasen", id: "Maaf, (saya) terlambat datang" }, { jp: "Sumimasen, toire e itte mo ii desuka", id: "Maaf, bolehkah ke kamar kecil" } ],
@@ -303,4 +228,3 @@
 </body>
 </html>
 ```
-
