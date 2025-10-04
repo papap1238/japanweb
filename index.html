@@ -1,3 +1,15 @@
+Tentu, saya akan memodifikasi kode Anda agar musik `sore.mp3` dapat berbunyi secara otomatis dan juga dapat dikontrol oleh pengguna.
+
+Masalah utama dalam kode Anda adalah kebijakan browser modern yang seringkali memblokir pemutaran audio otomatis (*autoplay*) sebelum pengguna berinteraksi dengan halaman (seperti mengklik).
+
+Untuk mengatasinya, saya telah menyempurnakan skrip Anda dengan logika berikut:
+1.  Mencoba memutar musik saat halaman dimuat.
+2.  Jika gagal (karena diblokir browser), musik akan diputar saat pengguna pertama kali mengklik di mana saja pada halaman.
+3.  Tombol kontrol musik (kanan bawah) akan tetap berfungsi untuk memutar atau menghentikan musik kapan saja.
+
+Berikut adalah kode yang telah diperbarui. Anda bisa langsung menyalin dan menggantinya.
+
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -134,10 +146,13 @@
     <!-- ========================= BAGIAN HTML ========================= -->
 
     <!-- ELEMEN AUDIO UNTUK MUSIK LATAR -->
-    <audio id="background-music" src="sore.mp3" loop></audio>
+    <audio id="background-music" loop>
+        <source src="sore.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung elemen audio.
+    </audio>
 
     <!-- TOMBOL KONTROL MUSIK -->
-    <button id="music-control">🔊</button>
+    <button id="music-control">🔇</button>
 
     <div class="container">
         <!-- 1. Layar Awal: Pilih Kategori -->
@@ -212,18 +227,27 @@
     let isMusicPlaying = false;
     music.volume = 0.3;
 
-    function playMusic() {
-        music.play().then(() => {
-            isMusicPlaying = true;
-            musicControlBtn.textContent = '🔊';
-        }).catch(() => {
-            isMusicPlaying = false;
-            musicControlBtn.textContent = '🔇';
-        });
-    }
-    
-    playMusic();
+    // Fungsi untuk mencoba memutar musik
+    function tryPlayMusic() {
+        // Cek jika musik sudah diputar atau elemen tidak ada
+        if (isMusicPlaying || !music) return;
 
+        const playPromise = music.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                // Autoplay berhasil
+                isMusicPlaying = true;
+                musicControlBtn.textContent = '🔊';
+            }).catch(error => {
+                // Autoplay gagal, tunggu interaksi pengguna
+                console.log("Autoplay musik dicegah oleh browser. Menunggu interaksi pengguna.");
+                isMusicPlaying = false;
+                musicControlBtn.textContent = '🔇';
+            });
+        }
+    }
+
+    // Toggle play/pause saat tombol kontrol diklik
     musicControlBtn.addEventListener('click', () => {
         if (isMusicPlaying) {
             music.pause();
@@ -235,11 +259,19 @@
         isMusicPlaying = !isMusicPlaying;
     });
 
-    document.body.addEventListener('click', () => {
-        if (!isMusicPlaying && music.paused) {
-            playMusic();
-        }
-    }, { once: true });
+    // Event listener untuk memulai musik pada interaksi pertama pengguna
+    function playOnFirstInteraction() {
+        tryPlayMusic();
+        // Hapus event listener ini setelah dijalankan sekali
+        document.body.removeEventListener('click', playOnFirstInteraction);
+        document.body.removeEventListener('keydown', playOnFirstInteraction);
+    }
+
+    document.body.addEventListener('click', playOnFirstInteraction);
+    document.body.addEventListener('keydown', playOnFirstInteraction);
+    
+    // Coba putar musik saat halaman selesai dimuat
+    window.addEventListener('load', tryPlayMusic);
 
     // --- DATA ---
     const vocabData = {
@@ -282,4 +314,4 @@
 
 </body>
 </html>
-
+```
